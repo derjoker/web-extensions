@@ -2,23 +2,17 @@
   "manifest_version": 2,
   "name": "duden",
   "description": "Deutsch Lernen.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "icons": {
     "64": "icons/icon.png"
   },
   "background": {
-    "scripts": [
-      "background_script.js"
-    ]
+    "scripts": ["background_script.js"]
   },
   "content_scripts": [
     {
-      "matches": [
-        "*://*.mozilla.org/*"
-      ],
-      "js": [
-        "content_script.js"
-      ]
+      "matches": ["https://www.duden.de/rechtschreibung/*"],
+      "js": ["jquery.min.js", "content_script.js"]
     }
   ],
   "browser_action": {
@@ -37,5 +31,6 @@
   },
   "options_ui": {
     "page": "options/index.html"
-  }
+  },
+  "permissions": ["storage"]
 }
