@@ -180,10 +180,10 @@ const save = $(`<button class="${KEY_ID}">Save</button>`).click(() => {
   const w = window.open(null, 'CSV')
   w.location.href = encodedUri
 
-  // $('input:checked').each((_, el) => {
-  //   $(el).click()
-  // })
-  // s.clear()
+  $('input:checked').each((_, el) => {
+    $(el).click()
+  })
+  s.clear()
 })
 
 $('body').prepend(save)
