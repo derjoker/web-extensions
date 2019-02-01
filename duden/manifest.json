@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "duden",
   "description": "Deutsch Lernen.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "icons": {
     "64": "icons/icon.png"
   },
@@ -13,6 +13,15 @@
     {
       "matches": ["https://www.duden.de/rechtschreibung/*"],
       "js": ["jquery.min.js", "content_script.js"]
+    },
+    {
+      "matches": [
+        "https://www.duden.de/*",
+        "https://www.mydealz.de/*",
+        "https://www.amazon.de/*",
+        "https://derjoker.github.io/vocabulary-builder/*"
+      ],
+      "js": ["dblclick.js"]
     }
   ],
   "browser_action": {
