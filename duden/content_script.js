@@ -4,6 +4,9 @@
 
 const KEY_ID = 'kvb'
 
+$('input:checkbox').remove()
+$(`button.${KEY_ID}`).remove()
+
 // storage
 function storage () {
   function get (key) {
@@ -165,7 +168,7 @@ $('input:checkbox').click(event => {
   else s.remove(key, value)
 })
 
-const save = $('<button>Save</button>').click(() => {
+const save = $(`<button class="${KEY_ID}">Save</button>`).click(() => {
   // console.log(s.items())
   const items = [].concat(...s.items().map(item => item.value))
   // console.log(items)
