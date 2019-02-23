@@ -4,7 +4,6 @@
 
 const KEY_ID = 'kvb';
 
-$('input:checkbox').remove();
 $(`button.${KEY_ID}`).remove();
 
 // storage
@@ -43,9 +42,7 @@ function storage() {
   function items() {
     return keys().map(key => ({
       key,
-      value: JSON.parse(window.localStorage.getItem(key)).map(item =>
-        JSON.parse(item)
-      ),
+      value: JSON.parse(window.localStorage.getItem(key)),
     }));
   }
 
@@ -65,6 +62,8 @@ const word = $('section#block-system-main > h1')
   .text()
   .replace(/\u00AD/g, '');
 
+let contents = [];
+
 const section = $('h2:contains("Bedeutungsübersicht")').parents('section');
 
 section.find('div.entry').each((_, entry) => {
@@ -77,24 +76,24 @@ section.find('div.entry').each((_, entry) => {
     .find('.term-section')
     .each((_, el) => {
       const b = $(el).find('h3:contains("Beispiel") + span');
-      b.prepend(
-        $('<input type="checkbox" />').data('kvb', {
+      if (b.length) {
+        contents.push({
           definition,
           example: b.text().trim(),
-        })
-      );
+        });
+      }
 
       const w = $(el).find(
         'h3:contains("Wendungen, Redensarten, Sprichwörter") + span'
       );
       const clone = w.parent().clone();
       clone.find('h3').remove();
-      w.prepend(
-        $('<input type="checkbox" />').data('kvb', {
+      if (w.length) {
+        contents.push({
           definition,
           example: clone.text().trim(),
-        })
-      );
+        });
+      }
 
       $(el)
         .find('ul > li')
@@ -102,12 +101,10 @@ section.find('div.entry').each((_, entry) => {
           const example = $(li)
             .text()
             .trim();
-          $(li).prepend(
-            $('<input type="checkbox" />').data('kvb', {
-              definition,
-              example,
-            })
-          );
+          contents.push({
+            definition,
+            example,
+          });
         });
     });
 });
@@ -122,24 +119,24 @@ section.find('ol > li > a').each((_, a) => {
     .find('.term-section')
     .each((_, el) => {
       const b = $(el).find('h3:contains("Beispiel") + span');
-      b.prepend(
-        $('<input type="checkbox" />').data('kvb', {
+      if (b.length) {
+        contents.push({
           definition,
           example: b.text().trim(),
-        })
-      );
+        });
+      }
 
       const w = $(el).find(
         'h3:contains("Wendungen, Redensarten, Sprichwörter") + span'
       );
       const clone = w.parent().clone();
       clone.find('h3').remove();
-      w.prepend(
-        $('<input type="checkbox" />').data('kvb', {
+      if (w.length) {
+        contents.push({
           definition,
           example: clone.text().trim(),
-        })
-      );
+        });
+      }
 
       $(el)
         .find('ul > li')
@@ -147,31 +144,25 @@ section.find('ol > li > a').each((_, a) => {
           const example = $(li)
             .text()
             .trim();
-          $(li).prepend(
-            $('<input type="checkbox" />').data('kvb', {
-              definition,
-              example,
-            })
-          );
+          contents.push({
+            definition,
+            example,
+          });
         });
     });
 });
 
-const s = storage();
-
-$('input:checkbox').click(event => {
-  const data = $(event.target).data('kvb');
-  const key = KEY_ID + '-' + stem;
-  const value = JSON.stringify(Object.assign({ word }, data));
-  console.log(key, value);
-  if (event.target.checked) s.add(key, value);
-  else s.remove(key, value);
-});
+const key = KEY_ID + '-' + stem;
+window.localStorage.setItem(
+  key,
+  JSON.stringify(contents.map(data => Object.assign({ word }, data)))
+);
 
 const save = $(`<button class="${KEY_ID}">Save</button>`).click(() => {
-  // console.log(s.items())
+  const s = storage();
+  // console.log(s.items());
   const items = [].concat(...s.items().map(item => item.value));
-  // console.log(items)
+  // console.log(items);
   const csv = new CsvWriter();
   const encodedUri =
     'data:text/csv;charset=utf-8,' +
@@ -180,9 +171,6 @@ const save = $(`<button class="${KEY_ID}">Save</button>`).click(() => {
   const w = window.open(null, 'CSV');
   w.location.href = encodedUri;
 
-  $('input:checked').each((_, el) => {
-    $(el).click();
-  });
   s.clear();
 });
 
