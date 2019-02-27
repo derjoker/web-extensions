@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "duden",
   "description": "Deutsch Lernen.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "icons": {
     "64": "icons/icon.png"
   },
@@ -18,6 +18,7 @@
       "matches": [
         "https://www.duden.de/*",
         "https://de.wikipedia.org/*",
+        "https://*.fandom.com/de/*",
         "https://www.mydealz.de/*",
         "https://www.amazon.de/*",
         "https://derjoker.github.io/vocabulary-builder/*"
